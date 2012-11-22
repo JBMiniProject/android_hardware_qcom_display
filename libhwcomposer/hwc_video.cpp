@@ -20,6 +20,7 @@
 #include "hwc_qbuf.h"
 #include "hwc_video.h"
 #include "hwc_external.h"
+#include <mdp_version.h>
 
 namespace qhwc {
 
@@ -34,7 +35,9 @@ bool VideoOverlay::sIsModeOn = false;
 //Cache stats, figure out the state, config overlay
 bool VideoOverlay::prepare(hwc_context_t *ctx, hwc_layer_list_t *list) {
     sIsModeOn = false;
-    if(!ctx->mMDP.hasOverlay) {
+    if((!ctx->mMDP.hasOverlay) ||
+                            (qdutils::MDPVersion::getInstance().getMDPVersion()
+                             <= qdutils::MDP_V4_0)) {
        ALOGD_IF(VIDEO_DEBUG,"%s, this hw doesnt support overlay", __FUNCTION__);
        return false;
     }
@@ -127,7 +130,7 @@ bool configPrimVid(hwc_context_t *ctx, hwc_layer_t *layer) {
             info,
             ovutils::ZORDER_0,
             isFgFlag,
-            ovutils::ROT_FLAG_DISABLED);
+            ovutils::ROT_DOWNSCALE_ENABLED);
     ovutils::PipeArgs pargs[ovutils::MAX_PIPES] = { parg, parg, parg };
     ov.setSource(pargs, ovutils::OV_PIPE0);
 
@@ -193,7 +196,7 @@ bool configExtVid(hwc_context_t *ctx, hwc_layer_t *layer) {
             info,
             ovutils::ZORDER_0,
             isFgFlag,
-            ovutils::ROT_FLAG_DISABLED);
+            ovutils::ROT_FLAGS_NONE);
     ovutils::PipeArgs pargs[ovutils::MAX_PIPES] = { parg, parg, parg };
     ov.setSource(pargs, ovutils::OV_PIPE1);
 
@@ -238,7 +241,7 @@ bool configExtCC(hwc_context_t *ctx, hwc_layer_t *layer) {
             info,
             ovutils::ZORDER_1,
             isFgFlag,
-            ovutils::ROT_FLAG_DISABLED);
+            ovutils::ROT_FLAGS_NONE);
     ovutils::PipeArgs pargs[ovutils::MAX_PIPES] = { parg, parg, parg };
     ov.setSource(pargs, ovutils::OV_PIPE2);
 

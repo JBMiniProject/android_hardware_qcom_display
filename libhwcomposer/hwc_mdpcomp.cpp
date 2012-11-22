@@ -17,6 +17,7 @@
  */
 
 #include <cutils/properties.h>
+#include <mdp_version.h>
 #include "hwc_mdpcomp.h"
 #include "hwc_qbuf.h"
 #include "hwc_external.h"
@@ -295,7 +296,7 @@ int MDPComp::prepare(hwc_context_t *ctx, hwc_layer_t *layer,
                                info,
                                zOrder,
                                isFG,
-                               ovutils::ROT_FLAG_DISABLED);
+                               ovutils::ROT_FLAGS_NONE);
 
         ovutils::PipeArgs pargs[MAX_PIPES] = { parg, parg, parg };
         if (!ov.setSource(pargs, dest)) {
@@ -353,7 +354,7 @@ bool MDPComp::is_doable(hwc_composer_device_t *dev, hwc_layer_list_t* list) {
     }
 
     //Disable MDPComp when ext display connected
-    if(ctx->mExtDisplay->getExternalDisplay()) {
+    if(ctx->mExtDisplay->getExternalDisplay()|| (ctx->hdmi_pending == true)) {
         ALOGD_IF(isDebug(), "%s: External display connected.", __FUNCTION__);
         return false;
     }
@@ -457,7 +458,12 @@ int MDPComp::mark_layers(hwc_layer_list_t* list, layer_mdp_info* layer_info,
 
         if((layer_prop & MDPCOMP_LAYER_DOWNSCALE) &&
                         (layer_prop & MDPCOMP_LAYER_BLEND)) {
-            pipe_pref = PIPE_REQ_RGB;
+            if (qdutils::MDPVersion::getInstance().getMDPVersion() >=
+                    qdutils::MDP_V4_2) {
+                pipe_pref = PIPE_REQ_RGB;
+            } else {
+                return MDPCOMP_ABORT;
+            }
          }
 
         int allocated_pipe = sPipeMgr.req_for_pipe( pipe_pref);
