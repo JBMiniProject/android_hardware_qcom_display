@@ -14,4 +14,8 @@ LOCAL_SRC_FILES := \
       overlayMdp.cpp \
       overlayRotator.cpp
 
+ifeq ($(TARGET_BOARD_PLATFORM),msm7x27)
+    LOCAL_CFLAGS += -DLEGACY_OVERLAY
+endif
+
 include $(BUILD_SHARED_LIBRARY)

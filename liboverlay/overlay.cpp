@@ -192,7 +192,7 @@ Overlay *Overlay::sInstance = 0;
 
 Overlay* Overlay::getInstance() {
     if(sInstance == NULL) {
-#ifndef TARGET7x27
+#ifndef LEGACY_OVERLAY
         if(utils::initOverlay() == -1) {
             ALOGE("utils::initOverlay() ERROR!!");
         }

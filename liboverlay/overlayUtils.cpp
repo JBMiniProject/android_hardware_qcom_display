@@ -151,7 +151,7 @@ bool FrameBufferInfo::supportTrueMirroring() const {
     return (trueMirroringSupported && mBorderFillSupported);
 }
 
-#ifndef TARGET7x27
+#ifndef LEGACY_OVERLAY
     /* clears any VG pipes allocated to the fb devices */
     int initOverlay() {
         msmfb_mixer_info_req  req;

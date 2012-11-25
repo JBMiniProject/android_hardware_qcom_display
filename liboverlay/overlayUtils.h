@@ -141,7 +141,7 @@ enum { INPUT_3D_MASK = 0xFFFF0000,
 enum { BARRIER_LAND = 1,
     BARRIER_PORT = 2 };
 
-#ifndef TARGET7x27
+#ifndef LEGACY_OVERLAY
 /* if SurfaceFlinger process gets killed in bypass mode, In initOverlay()
  * close all the pipes if it is opened after reboot.
  */
