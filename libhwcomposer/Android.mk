@@ -9,6 +9,10 @@ LOCAL_SHARED_LIBRARIES        := $(common_libs) libEGL liboverlay libgenlock \
                                  libhwcexternal libqdutils libhardware_legacy \
                                  libdl libmemalloc libhwcservice libGLESv1_CM
 
+ifeq ($(TARGET_BOARD_PLATFORM),msm7x27)
+    LOCAL_CFLAGS += -DANCIENT_GL
+endif
+
 LOCAL_CFLAGS                  := $(common_flags) -DLOG_TAG=\"hwcomposer\"
 LOCAL_ADDITIONAL_DEPENDENCIES := $(common_deps)
 LOCAL_SRC_FILES               := hwc.cpp          \
