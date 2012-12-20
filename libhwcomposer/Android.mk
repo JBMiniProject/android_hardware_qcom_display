@@ -7,7 +7,6 @@ LOCAL_MODULE_TAGS             := optional
 LOCAL_C_INCLUDES              := $(common_includes)
 
 ifeq ($(TARGET_BOARD_PLATFORM),msm7x27)
-    LOCAL_CFLAGS += -DANCIENT_GL
     LOCAL_SHARED_LIBRARIES := $(common_libs) libEGL liboverlay libgenlock \
                               libhwcexternal libqdutils libhardware_legacy \
                               libdl libmemalloc libhwcservice
